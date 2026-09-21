@@ -199,6 +199,14 @@ def test_exact_unproven_is_shown_as_an_upper_bound(monkeypatch, clean_cache):
 # ---------------------------------------------------------------------------------------------------
 # Stichprobe und Kurve auf Knopfdruck
 # ---------------------------------------------------------------------------------------------------
+@pytest.fixture
+def fast_curve(monkeypatch):
+    """Stichprobe und Kurve mit wenigen Listen und kurzem Limit: prüft den Ablauf der App, nicht die Zahlen (die prüfen test_evaluation und test_preset_stories). Spart auf der CI Minuten."""
+    real_sample, real_frontier = E.sample, E.frontier
+    monkeypatch.setattr(E, "sample", lambda *a, **k: real_sample(*a, n_lists=6, exact_limit=1, **k))
+    monkeypatch.setattr(E, "frontier", lambda *a, **k: real_frontier(*a, n_lists=3, points=(0, 30, 100), exact_limit=1, **k))
+
+
 SMALL = dict(n_stacks_slider=4, n_tiers_slider=4)
 
 
@@ -215,7 +223,7 @@ def test_before_the_button_nothing_is_computed_and_after_it_everything_is_shown(
     assert "Basis: 20 Ladelisten (Seeds 0-19" in caps and "Basis: 7 Grenzwerte × 8 Ladelisten (Seeds 0-7)" in caps and "nicht bewiesen" in caps
 
 
-def test_stale_curve_after_a_setting_change_is_flagged_and_not_shown():
+def test_stale_curve_after_a_setting_change_is_flagged_and_not_shown(fast_curve):
     at = set_and_run(fresh(), **SMALL)
     click(at, "📊 Stichprobe und Kurve berechnen")
     set_and_run(at, kg_slider=60)
@@ -225,7 +233,7 @@ def test_stale_curve_after_a_setting_change_is_flagged_and_not_shown():
     assert [s for s in at.success if "Exakt gegen Gewicht zuerst" in s.value]
 
 
-def test_the_seed_does_not_invalidate_the_sample_but_tilt_does():
+def test_the_seed_does_not_invalidate_the_sample_but_tilt_does(fast_curve):
     at = set_and_run(fresh(), **SMALL)
     click(at, "📊 Stichprobe und Kurve berechnen")
     set_and_run(at, seed_input=77)
@@ -244,7 +252,7 @@ def _fake_verdict(monkeypatch, kind, pct):
     ("worse", 25.0, "im Mittel **25 % mehr** Umstauungen (2.0 je Ladeliste, Standardfehler 0.50)."),
     ("worse", None, "im Mittel **2.0 mehr** Umstauungen (2.0 je Ladeliste, Standardfehler 0.50)."),
 ])
-def test_verdict_sentences_in_the_four_variants(monkeypatch, clean_cache, kind, pct, expected):
+def test_verdict_sentences_in_the_four_variants(monkeypatch, clean_cache, fast_curve, kind, pct, expected):
     _fake_verdict(monkeypatch, kind, pct)
     at = set_and_run(fresh(), **SMALL)
     click(at, "📊 Stichprobe und Kurve berechnen")
@@ -253,7 +261,7 @@ def test_verdict_sentences_in_the_four_variants(monkeypatch, clean_cache, kind, 
     assert all(t.count("(") == t.count(")") for t in texts)
 
 
-def test_verdict_unclear_and_none(monkeypatch, clean_cache):
+def test_verdict_unclear_and_none(monkeypatch, clean_cache, fast_curve):
     _fake_verdict(monkeypatch, "unclear", 1.0)
     at = set_and_run(fresh(), **SMALL)
     click(at, "📊 Stichprobe und Kurve berechnen")
@@ -265,7 +273,7 @@ def test_verdict_unclear_and_none(monkeypatch, clean_cache):
     assert len([i for i in at2.info if "In keiner Ladeliste sind beide Verfahren zulässig" in i.value]) == 3
 
 
-def test_real_verdicts_exact_beats_weight_first_and_repair():
+def test_real_verdicts_exact_beats_weight_first_and_repair(fast_curve):
     at = set_and_run(fresh(), n_stacks_slider=6, n_tiers_slider=5)
     click(at, "📊 Stichprobe und Kurve berechnen")
     assert [s for s in at.success if "Exakt gegen Gewicht zuerst" in s.value and "weniger" in s.value]
@@ -321,7 +329,7 @@ def test_pdf_download_button_is_in_the_main_view_and_survives_edge_scenarios():
         assert len(set_and_run(at, **values).get("download_button")) == 1
 
 
-def test_pdf_is_built_from_the_curve_only_when_it_matches_the_settings(monkeypatch):
+def test_pdf_is_built_from_the_curve_only_when_it_matches_the_settings(monkeypatch, fast_curve):
     import stau_pdf_export as PDF
     seen = []
     real = PDF.generate_stau_pdf

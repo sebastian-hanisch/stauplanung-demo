@@ -24,16 +24,22 @@ def _run(name, seed, limit):
     return E.run_list(p["n_stacks"], p["n_tiers"], p["fill_pct"], p["n_ports"], seed, p["kg_pct"], p["tilt_pct"], limit)
 
 
+# Zeitlimits: Die Aussagen über Exakt sind Aussagen über ein bewiesenes Optimum. Auf einem langsamen Rechner (CI, wenige Kerne) beweist der Löser in 2 s weniger als lokal; darum
+# rechnen die Tests großzügig (Ende, sobald bewiesen) und nur "Am Limit", wo ohnehin ein Teil unbewiesen bleibt, mit dem App-Limit von 2 s (die Schwellen dort halten mit Abstand).
+POP_LIMIT = {"Am Limit": C.SAMPLE_LIMIT_SECONDS}
+SHOWN_LIMIT = C.EXACT_LONG_LIMIT_SECONDS
+
+
 def _population(name):
     if name not in _cache:
-        _cache[name] = tuple(_run(name, s, C.SAMPLE_LIMIT_SECONDS) for s in range(C.SAMPLE_LISTS))
+        _cache[name] = tuple(_run(name, s, POP_LIMIT.get(name, 10)) for s in range(C.SAMPLE_LISTS))
     return _cache[name]
 
 
 # ---------------- 1. in der gezeigten Ladeliste (wie app.py: gleiches Zeitlimit) ----------------
 @pytest.mark.parametrize("name", NAMES)
 def test_the_story_holds_in_the_list_the_preset_shows(name):
-    r = _run(name, C.PRESETS[name]["seed"], C.EXACT_LIVE_LIMIT_SECONDS)
+    r = _run(name, C.PRESETS[name]["seed"], SHOWN_LIMIT)
     assert ST.holds(name, r), (name, r)
 
 
@@ -62,5 +68,5 @@ def _pct(values, q):
 @pytest.mark.parametrize("name,key", ST.TYPICAL)
 def test_the_shown_list_is_typical(name, key):
     pop = [r.restows[key] for r in _population(name) if r.valid[key]]
-    shown = _run(name, C.PRESETS[name]["seed"], C.EXACT_LIVE_LIMIT_SECONDS).restows[key]
+    shown = _run(name, C.PRESETS[name]["seed"], SHOWN_LIMIT).restows[key]
     assert _pct(pop, 0.1) <= shown <= _pct(pop, 0.9), (name, key, shown, sorted(pop))

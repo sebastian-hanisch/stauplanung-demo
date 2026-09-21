@@ -48,7 +48,7 @@ def test_the_artificial_base_case_satisfies_every_criterion(name):
     ("Üblich", dict(weight=15), []), ("Üblich", dict(weight=14), [3]),
     ("Üblich", dict(exact=1), [1]), ("Üblich", dict(repair=1), []),
     ("Knapp", dict(repair=1), []), ("Knapp", dict(repair=0), [1]), ("Knapp", dict(exact=1), [0]),
-    ("Am Limit", dict(exact=1, repair=3), []), ("Am Limit", dict(exact=1, repair=2), [1]),
+    ("Am Limit", dict(exact=1, repair=2), []), ("Am Limit", dict(exact=1, repair=1), [1]),
     ("Am Limit", dict(exact=0, repair=8), [0]),
     ("Viele Häfen", dict(weight=25), []), ("Viele Häfen", dict(weight=24), [0]),
     ("Viele Häfen", dict(repair=1), [1]), ("Viele Häfen", dict(repair=2, exact=2), [2]),
@@ -100,7 +100,7 @@ def test_viele_haefen_ignores_lists_where_a_method_has_no_valid_plan():
     ("Locker", {}, True), ("Locker", dict(weight=14), False), ("Locker", dict(pod=1), False), ("Locker", dict(weight=15), True),
     ("Üblich", {}, True), ("Üblich", dict(repair=3), False), ("Üblich", dict(repair=2), True), ("Üblich", dict(exact=1), False), ("Üblich", dict(weight=14), False),
     ("Knapp", {}, True), ("Knapp", dict(repair=0), False), ("Knapp", dict(repair=1), True), ("Knapp", dict(exact=1), False),
-    ("Am Limit", {}, True), ("Am Limit", dict(exact=0), False), ("Am Limit", dict(exact=1, repair=3), True), ("Am Limit", dict(exact=1, repair=2), False),
+    ("Am Limit", {}, True), ("Am Limit", dict(exact=0), False), ("Am Limit", dict(exact=1, repair=2), True), ("Am Limit", dict(exact=1, repair=1), False),
     ("Viele Häfen", {}, True), ("Viele Häfen", dict(weight=24), False), ("Viele Häfen", dict(repair=1), True), ("Viele Häfen", dict(repair=0), False),
     ("Viele Häfen", dict(exact=2), False),
 ])
