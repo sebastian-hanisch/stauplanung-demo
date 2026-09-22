@@ -1,5 +1,7 @@
 # Schiffsstauplanung: Stabil stauen, ohne umzustauen? – Streamlit-Demo
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-stauplanung-demo.streamlit.app/)**
+
 Interaktive Fall-Demo zur **Stauplanung eines Bays**: Ein Schiff wird in einem Hafen beladen und läuft mehrere Häfen an. Was im nächsten Hafen von Bord muss, darf nicht unter dem liegen,
 was weiter fährt, sonst muss **umgestaut** werden (abheben, löschen, zurücksetzen). Zugleich muss der Bay **stabil** stehen: Schweres nach unten, die Seiten im Gleichgewicht. Beide
 Wünsche ziehen in entgegengesetzte Richtungen. Die Demo beantwortet: **Was kostet die Stabilität wirklich?**
