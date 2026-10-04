@@ -85,7 +85,7 @@ unabhängig; die anderen stehen mit Abstand zur Schwelle.
 
 ## Tests
 
-`python -m pytest tests/ -v` – 1273 Tests, rund 8 Minuten. Zusammensetzung:
+`python -m pytest tests/ -v` – 1275 Tests, rund 8 Minuten. Zusammensetzung:
 
 - **Regeln:** Umstauungen nach Formel gegen eine Simulation des Löschens Hafen für Hafen (300 Zufallsstapel), Gewicht zuerst gegen Brute Force und eine analytische Untergrenze, Zielhafen zuerst
   gegen das Brute-Force-Minimum, inkrementelle gegen naive Reparatur (120 Listen).
@@ -135,6 +135,4 @@ Tests: `python -m pytest tests/ -v`. Preset-Abstimmung: `python tools/tune_prese
 
 ---
 
-Teil des [Operations-Research-Demo-Portfolios](https://sebastianhanisch.net/demos.html) von
-[Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning.
-Interesse an einer maßgeschneiderten Lösung? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zum Thema: [Hafenlogistik optimieren](https://sebastianhanisch.net/hafenlogistik-optimierung.html).
