@@ -90,8 +90,8 @@ with st.sidebar:
 
     st.markdown("**Stabilität**")
     kg_pct = st.slider("Schwerpunkt-Grenze (% des Spielraums)", *bounds("kg_slider"), step=C.KG_PCT_STEP, format="%d%%", key="kg_slider",
-                       help="100 % = die Zielhafen-Sortierung ist gerade noch erlaubt, 0 % = nur der tiefstmögliche Schwerpunkt. Unter etwa 15 % rechnet der Exakt-Löser lang "
-                       "und beweist das Optimum oft nicht.")
+                       help="100 % = die Zielhafen-Sortierung ist gerade noch erlaubt, 0 % = nur der tiefstmögliche Schwerpunkt. Bei 0 % (nur der tiefstmögliche Schwerpunkt) rechnet der Exakt-Löser lang "
+                       "und beweist das Optimum oft nicht; ab etwa 10 % gelingt der Beweis meist.")
     tilt_pct = st.slider("Seitenneigung (% des größten Moments)", *bounds("tilt_slider"), format="%d%%", key="tilt_slider",
                          help="Zulässige Schieflage. Mindestens 1 %: Bei 0 gibt es praktisch keinen zulässigen Plan.")
     st.button("🎲 Neue Ladeliste", width="stretch", on_click=randomize_seed, help="Würfelt einen neuen Seed für die Ladeliste.")
@@ -164,7 +164,7 @@ for col, o, side in ((left_col, ref, "left"), (right_col, right, "right")):
         else:
             st.info(o.reason)
 port_colors = ", ".join(f"{p + 1} {C.POD_COLOR_NAMES[p]}" for p in range(inst.n_ports))
-st.caption(f"Ein Rechteck je Container: Farbe = Zielhafen ({port_colors}), Zahl = Gewichtsklasse (dunkler = schwerer), **roter Rand = muss umgestaut werden**. Lage 1 ist unten. "
+st.caption(f"Ein Rechteck je Container: Farbe = Zielhafen ({port_colors}), Zahl = Gewichtsklasse (dunkler = schwerer), **roter Rand = muss umgestaut werden**. Lage 1 ist unten (im Schwerpunkt zählt die unterste Lage als 0). "
            f"Schwerpunkt-Grenze: tiefstmöglich {lim.kg_min}, eingestellt {lim.kg_limit}, Zielhafen-Sortierung {lim.kg_pod}; zulässiges Seitenmoment {lim.tilt_limit}.")
 
 pdf_slot = st.container()          # der Download steht in der Hauptansicht, wird aber erst gefüllt, wenn Stichprobe und Kurve (falls berechnet) feststehen
@@ -184,7 +184,7 @@ gerechnet, **mit der Verteilung dazu**:
 """
 )
 g1, g2, g3 = st.columns(3)
-g1.metric("Tiefstmöglicher Schwerpunkt", f"{lim.kg_min}", help="Summe Gewicht × Lage, wenn die schwersten Container ganz unten stehen (Gewicht zuerst).")
+g1.metric("Tiefstmöglicher Schwerpunkt", f"{lim.kg_min}", help="Summe Gewicht × Lage (unterste Lage = 0), wenn die schwersten Container ganz unten stehen (Gewicht zuerst).")
 g2.metric("Eingestellte Grenze", f"{lim.kg_limit}", help=f"{kg_pct} % des Spielraums zwischen dem tiefstmöglichen Schwerpunkt und dem der Zielhafen-Sortierung.")
 g3.metric("Zielhafen-Sortierung", f"{lim.kg_pod}", help="Schwerpunkt, wenn nach Zielhafen sortiert wird (0 Umstauungen): erlaubt erst bei 100 %.")
 
@@ -332,7 +332,7 @@ Schwerpunkt. Die **Seitenneigung** begrenzt das Moment Σ (Abstand von der Mitte
 - **Exakt (CP-SAT)**: die kleinste Zahl von Umstauungen, die beide Grenzen einhält, mit Beweis. Reicht das Zeitlimit nicht, steht ein Intervall aus unterer Schranke und bester Lösung, nie ein
   unbewiesener Wert als Optimum. Ein Optimum von 0 ist per Definition bewiesen.
 
-**Das Bay-Bild lesen.** Ein Rechteck je Container: Farbe = Zielhafen, Zahl = Gewichtsklasse (dunkler = schwerer), **roter Rand = dieser Container muss umgestaut werden**. Unten ist Lage 1.
+**Das Bay-Bild lesen.** Ein Rechteck je Container: Farbe = Zielhafen, Zahl = Gewichtsklasse (dunkler = schwerer), **roter Rand = dieser Container muss umgestaut werden**. Unten ist Lage 1; im Schwerpunkt Σ Gewicht × Lage zählt die unterste Lage dagegen als 0.
 
 **Warum die einfachen Regeln scheitern und die Abwägung fast nichts kostet.** Nach Zielhafen sortiert steht jeder Stapel von unten nach oben in absteigender Hafenreihenfolge, aber die Gewichte
 sind zufällig verteilt: Der Schwerpunkt liegt hoch. Nach Gewicht sortiert liegt er tief, aber die Häfen sind durcheinander. Die Anordnung dazwischen gibt es: Jeder Stapel bleibt nach
