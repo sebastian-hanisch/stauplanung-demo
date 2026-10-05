@@ -60,7 +60,7 @@ OUTCOME_COLORS = {"better": "#2e7d4f", "equal": "#b8bfc9", "worse": "#c0392b"}
 CHART_HEIGHT = 420
 STRATEGY_DESCRIPTIONS = {
     STRAT_POD: "**Zielhafen zuerst.** Container nach Zielhafen sortiert, der fernste unten, Lage für Lage; innerhalb eines Hafens die schweren zuerst. **0 Umstauungen** nach Konstruktion, "
-               "aber der Schwerpunkt liegt so hoch wie möglich: Sobald die Schwerpunkt-Grenze unter 100 % liegt, ist der Plan unzulässig.",
+               "aber das Gewicht spielt keine Rolle, der Schwerpunkt liegt deutlich über dem tiefstmöglichen: Sobald die Schwerpunkt-Grenze unter 100 % liegt, ist der Plan unzulässig.",
     STRAT_WEIGHT: "**Gewicht zuerst.** Die schwersten Container nach unten (tiefster erreichbarer Schwerpunkt), Lage für Lage, innerhalb gleichen Gewichts der fernste Zielhafen unten. "
                   "Stabil, aber ohne Rücksicht auf die Häfen: viele Umstauungen. Die Referenz aller Vergleiche.",
     STRAT_REPAIR: "**Sortieren + Reparatur.** Start bei der Zielhafen-Sortierung; solange der Schwerpunkt über der Grenze liegt, wird der Tausch zweier Container gewählt, der ihn je zusätzlicher "

@@ -325,7 +325,7 @@ Schwerpunkt. Die **Seitenneigung** begrenzt das Moment Σ (Abstand von der Mitte
 
 **Vier Verfahren**, alle mit denselben Containern:
 
-- **Zielhafen zuerst**: nach Zielhafen sortiert, der fernste unten. Null Umstauungen, aber der Schwerpunkt liegt so hoch wie möglich; unter 100 % Grenze ist der Plan unzulässig.
+- **Zielhafen zuerst**: nach Zielhafen sortiert, der fernste unten. Null Umstauungen, aber das Gewicht spielt keine Rolle: Der Schwerpunkt liegt im Mittel deutlich über dem tiefstmöglichen; unter 100 % Grenze ist der Plan unzulässig.
 - **Gewicht zuerst** (Referenz): schwerste unten. Stabil, aber ohne Rücksicht auf die Häfen: viele Umstauungen.
 - **Sortieren + Reparatur**: Start bei der Zielhafen-Sortierung, dann Tausche, die den Schwerpunkt unter die Grenze bringen und dabei möglichst wenig Umstauungen kosten. Kann die Grenze in
   seltenen Fällen verfehlen (dann steht "Grenze verletzt").

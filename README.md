@@ -6,12 +6,12 @@ Interaktive Fall-Demo zur **Stauplanung eines Bays**: Ein Schiff wird in einem H
 was weiter fährt, sonst muss **umgestaut** werden (abheben, löschen, zurücksetzen). Zugleich muss der Bay **stabil** stehen: Schweres nach unten, die Seiten im Gleichgewicht. Beide
 Wünsche ziehen in entgegengesetzte Richtungen. Die Demo beantwortet: **Was kostet die Stabilität wirklich?**
 
-Teil des Portfolios für die Website „Sebastian Hanisch – Operations Research und Machine Learning", Welle 3 der Hafen-Linie (Schiff → Kran; nach der Fahrzeug-Demo
+Teil des Portfolios für die Website „Sebastian Hanisch – Operations Research und Machine Learning“, Welle 3 der Hafen-Linie (Schiff → Kran; nach der Fahrzeug-Demo
 `fahrzeugflotte-demo`, der Kaiplatz-Demo `robuste-kaiplatz-demo` und der Stapelplanung `stapelplanung-demo`).
 
 ## Warum dieses Problem
 
-Die beiden einfachen Regeln scheitern auf entgegengesetzte Weise: **Nach Zielhafen sortieren** kostet null Umstauungen, aber der Schwerpunkt liegt so hoch wie möglich, der Plan ist unter
+Die beiden einfachen Regeln scheitern auf entgegengesetzte Weise: **Nach Zielhafen sortieren** kostet null Umstauungen, aber das Gewicht spielt keine Rolle: Der Schwerpunkt liegt deutlich über dem tiefstmöglichen (im Standard-Bay etwa 40 % des Wegs zum höchstmöglichen), der Plan ist unter
 100 % der Grenze unzulässig. **Schwer nach unten** ist stabil, ignoriert aber die Häfen und braucht im Standard-Bay gut 26 Umstauungen. Wer beides zugleich optimiert, zahlt bis fast zur
 Grenze des Möglichen nichts; erst ganz am strengen Ende (**die Kante**) entstehen einzelne Umstauungen. Jede Umstauung kostet zwei Kranspiele: die Stabilität hat einen messbaren
 Preis in Kranzeit.
@@ -22,13 +22,13 @@ Ein Bay aus C Stapeln und T Lagen, ein Ladehafen, Zielhäfen 1 bis P. Ein Contai
 Lücken. **Umstauungen** eines Containers = Zahl der verschiedenen Häfen unter ihm, die vor seinem eigenen angelaufen werden (das ist ein Relocation-Problem mit gewählter Platzierung).
 **Schwerpunkt-Grenze:** Σ Gewicht × Lage ≤ L, angegeben als Anteil des Spielraums zwischen dem tiefstmöglichen Schwerpunkt (Gewicht zuerst) und dem der Zielhafen-Sortierung
 (100 % = die Sortierung ist gerade erlaubt, 0 % = nur der tiefste Schwerpunkt); ganzzahlig gerechnet: L = kmin + ⌊p·(kpod − kmin)/100⌋. **Seitenneigung:** |Σ (2c − (C − 1)) · W_c| ≤ B mit
-B = ⌊p·Gesamtgewicht·(C − 1)/100⌋. **Kranspiele = Container + 2 × Umstauungen**, mit 30 Spielen je Stunde als Annahme. Formal im Expander „📐 Mathematische Formulierung".
+B = ⌊p·Gesamtgewicht·(C − 1)/100⌋. **Kranspiele = Container + 2 × Umstauungen**, mit 30 Spielen je Stunde als Annahme. Formal im Expander „📐 Mathematische Formulierung“.
 
 ## Methodik – vier Verfahren
 
 Alle Verfahren stauen dieselben Container; Referenz aller Vergleiche ist **Gewicht zuerst**.
 
-- **Zielhafen zuerst**: nach Zielhafen sortiert, der fernste unten. Null Umstauungen, Schwerpunkt so hoch wie möglich; unterhalb 100 % Grenze zulässig nur, wenn die Sortierung zufällig passt.
+- **Zielhafen zuerst**: nach Zielhafen sortiert, der fernste unten. Null Umstauungen, Schwerpunkt deutlich über dem tiefstmöglichen (das Gewicht spielt keine Rolle); unterhalb 100 % Grenze zulässig nur, wenn die Sortierung zufällig passt.
 - **Gewicht zuerst**: schwerste unten. Der tiefstmögliche Schwerpunkt (bewiesen gegen Brute Force und eine analytische Untergrenze).
 - **Sortieren + Reparatur** (eigene Heuristik): Start bei der Zielhafen-Sortierung, dann Tausche, die den Schwerpunkt unter die Grenze bringen und dabei möglichst wenig Umstauungen kosten;
   inkrementell gerechnet (identisch zur naiven Fassung, 7,5-mal schneller). Sie kann die Grenze verfehlen (dann steht „Grenze verletzt“) und ist in seltenen Fällen schlechter als Gewicht zuerst.
@@ -85,12 +85,13 @@ unabhängig; die anderen stehen mit Abstand zur Schwelle.
 
 ## Tests
 
-`python -m pytest tests/ -v` – 1275 Tests, rund 8 Minuten. Zusammensetzung:
+`python -m pytest tests/ -v` – 1278 Tests, rund 9 Minuten. Zusammensetzung:
 
 - **Regeln:** Umstauungen nach Formel gegen eine Simulation des Löschens Hafen für Hafen (300 Zufallsstapel), Gewicht zuerst gegen Brute Force und eine analytische Untergrenze, Zielhafen zuerst
   gegen das Brute-Force-Minimum, inkrementelle gegen naive Reparatur (120 Listen).
 - **Exakt:** CP-SAT gegen Brute Force auf 300 Kleinstlisten (davon 100 mit strenger Grenze, mit Prüfung, dass positive Optima vorkommen), Unzulässigkeit, Grenzen inklusive, „Optimum ≤ jede Regel“,
   Monotonie in der Grenze, Zeitlimit-Pfade mit ersetztem Löser.
+- **Orakel (`test_oracle_stau.py`):** tiefster Schwerpunkt gegen geschlossene Formel, Exakt-Löser gegen eine dynamische Programmierung über die Stapel (anderer Rechenweg als CP-SAT und als die Vollaufzählung).
 - **Auswertung:** Kennzahlen, Frontier gegen Direktrechnungen, Urteil in drei Zuständen und an der Schwelle, Verteilung besser / gleich / schlechter.
 - **Figuren und Panels:** Bay-Bild aus den Ergebnisobjekten (Form je Container, roter Rand, Hover über das ganze Rechteck), Kennzahlen-Farben am Streamlit-Proto.
 - **Presets:** Geschichte in der gezeigten Liste, im Mittel von 20 Listen, typisch je Kennzahl; Kriterien an ihren Schwellen mit künstlichen Werten.
