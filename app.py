@@ -54,6 +54,17 @@ steht im Expander "Wie funktioniert diese Demo?" weiter unten, die formale Herle
 """
 )
 
+# erklaerseite:einfach:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/schiffsstauplanung-erklaert.json, nicht von Hand ändern)
+with st.expander("💬 In einfachen Worten"):
+    st.markdown(
+        """
+Ein Schiff wird in einem Hafen beladen und läuft danach mehrere Häfen nacheinander an. Die Container stehen in Stapeln. Was zuerst von Bord geht, soll oben stehen, sonst müssen Container abgehoben und zurückgesetzt werden. Zugleich soll Schweres unten stehen, damit das Schiff stabil bleibt. Die Demo vergleicht Verfahren: nach Zielhafen sortieren, nach Gewicht sortieren, eine Tauschregel, die von der Hafen-Sortierung aus den Schwerpunkt senkt, und einen exakten Löser, der die kleinste Zahl von Umstauungen beweist. Sie sehen einen einzelnen Stauplan und daneben die Auswertung über viele zufällige Ladelisten. Die Container sind erfunden, und die Kranzeit beruht auf einer Annahme.
+
+[Ausführlich und verständlich erklärt, mit Fachteil](https://sebastianhanisch.net/schiffsstauplanung-erklaert.html)
+        """
+    )
+# erklaerseite:einfach:end
+
 st.caption("🎯 Schnellstart – ein Beispielszenario laden:")
 PRESET_HELP = {
     "Locker": "Wenn die Grenze nicht drückt, genügt die Zielhafen-Sortierung: 0 Umstauungen, stabil.",
@@ -356,6 +367,25 @@ heißt, dass wenige Listen den Gewinn tragen.
     )
 
 with st.expander("📐 Mathematische Formulierung"):
+    # erklaerseite:lesehilfe:start (erzeugt von tools/set_demo_explainer.py (Website-Repo) aus tools/content/explainers/schiffsstauplanung-erklaert.json, nicht von Hand ändern)
+    st.markdown(
+        r"""
+**Lesehilfe.** Gegeben sind ein Bay mit einer festen Zahl von Stapeln und Lagen, Container mit Zielhafen und Gewichtsklasse sowie eine Schwerpunkt-Grenze und eine Grenze für die Seitenneigung. Gesucht ist ein Stauplan, der beide Grenzen einhält und möglichst wenige Umstauungen braucht.
+
+| Symbol | Bedeutung |
+|---|---|
+| $x_{c,t,k}$ | 1, wenn ein Container vom Typ $k$ in Stapel $c$, Lage $t$ steht, sonst 0 (Lage 0 ist unten) |
+| $C$, $T$, $P$ | Zahl der Stapel, der Lagen und der Zielhäfen |
+| $p_k$, $w_k$, $n_k$ | Zielhafen, Gewichtsklasse (1 bis 4) und Anzahl der Container vom Typ $k$ |
+| $W_c$ | Gewicht von Stapel $c$ |
+| $L$, $B$ | Obergrenze der Schwerpunkt-Summe $\sum$ Gewicht mal Lage und des Seitenmoments |
+| $K_{\min}$, $K_{\mathrm{pod}}$ | Schwerpunkt-Summe der nach Gewicht bzw. nach Zielhafen sortierten Ladeliste |
+| $r_{c,t,p}$ | 1, wenn der Container in Zelle $(c,t)$ an Hafen $p$ umgestaut wird |
+
+[Schritt für Schritt erklärt, mit Herleitung und Literatur](https://sebastianhanisch.net/schiffsstauplanung-erklaert.html#fachleute)
+        """
+    )
+    # erklaerseite:lesehilfe:end
     st.markdown(
         r"""
 **Stauplanung eines Bays mit Zielhäfen, Schwerpunkt und Seitenneigung** (NP-schwer; kleine Fälle exakt lösbar).

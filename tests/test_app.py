@@ -2,6 +2,7 @@
 Exakt-Tab, Vergleichstabelle, Texte."""
 
 import pathlib
+import re
 
 import pytest
 from streamlit.proto.Metric_pb2 import Metric as MetricProto
@@ -58,7 +59,7 @@ def test_skeleton_and_footer():
     assert len(at.title) == 1 and "Schiffsstauplanung" in at.title[0].value
     assert any(v.value.startswith("## 🎯") for v in at.markdown)
     assert [s.value for s in at.subheader] == ["📐 Was kostet die Stabilität?"]
-    assert [e.label for e in at.expander] == ["🔧 Wie wir das erreichen – vollständiger Methodenvergleich", "Wie funktioniert diese Demo?", "📐 Mathematische Formulierung"]
+    assert [e.label for e in at.expander] == ["💬 In einfachen Worten", "🔧 Wie wir das erreichen – vollständiger Methodenvergleich", "Wie funktioniert diese Demo?", "📐 Mathematische Formulierung"]
     assert any(c.value == FOOTER for c in at.caption)
     presets = [b.label for b in at.button if b.label in C.PRESETS]
     assert presets == list(C.PRESETS) and len(presets) == 5 and all(len(n) <= 16 for n in presets)
@@ -318,7 +319,7 @@ def test_texts_mention_limits_and_no_dead_file_links():
     md = "\n".join(m.value for m in at.markdown)
     assert "Grenzen dieses Modells" in md and "Größenordnungen aus einer Simulation" in md and "Kranspiele = Container + 2 × Umstauungen" in md
     assert "Ein Bay, ein Ladehafen" in md and "Reparatur-Heuristik ist meine" in md
-    assert "](" not in md.replace("https://sebastianhanisch.net", "")
+    assert "](" not in re.sub(r"\]\(https://sebastianhanisch\.net/[^)]*\)", "]", md).replace("https://sebastianhanisch.net", "")  # Links auf die Website (Erklärseite) sind erlaubt, Datei-Links nicht
     for word in ("Umstauung", "Schwerpunkt", "Zielhäfen", "Mathematische Formulierung", "Stabilität"):
         assert word in md
     for ascii_form in ("Staerke", "Zielhaefen", "Stabilitaet", "Gewichtsklasse".replace("k", "kk")):
