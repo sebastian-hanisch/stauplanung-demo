@@ -1,4 +1,4 @@
-"""Jedes Preset erzählt eine Geschichte (Abnahmekriterien in stau_stories.py). Hier wird geprüft, dass sie trägt:
+"""Jedes Preset erzählt eine Geschichte (Abnahmekriterien in stau_stories.py). Hier wird geprüft, dass sie stimmt:
 
 1. in der EINEN Ladeliste, die das Preset zeigt (sonst zeigt das Preset das Gegenteil seines Hilfetexts),
 2. im MITTEL über 20 andere Ladelisten (sonst ist das Preset ein Einzelfall, ausgesucht nach dem schönsten Seed),

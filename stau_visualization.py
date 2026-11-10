@@ -134,7 +134,7 @@ def distribution_figure(dists):
 
 
 def gain_figure(dists):
-    """Median-Gewinn neben Mittel-Gewinn je Verfahren (Umstauungen je Ladeliste, positiv = weniger als Gewicht zuerst): ein Mittelwert weit vom Median heißt, dass wenige Listen tragen."""
+    """Median-Gewinn neben Mittel-Gewinn je Verfahren (Umstauungen je Ladeliste, positiv = weniger als Gewicht zuerst): ein Mittelwert weit vom Median heißt, dass wenige Listen den Gewinn liefern."""
     import plotly.graph_objects as go
 
     labels = [C.STRATEGY_SHORT[d.key] for d in dists]

@@ -353,7 +353,7 @@ Stichprobe und die Kurve.
 
 **Stichprobe, Verteilung und Urteil.** Die Stichprobe stellt Ihre Einstellungen auf 20 Ladelisten (Seeds 0 bis 19, nicht Ihr Seed) nach. Ein Unterschied gilt als klar, wenn er mehr als zwei
 Standardfehler der gepaarten Differenz beträgt. Die Verteilung zeigt, in wie vielen Listen ein Verfahren besser, gleich oder schlechter ist als Gewicht zuerst; ein Mittelwert weit vom Median
-heißt, dass wenige Listen den Gewinn tragen.
+heißt, dass wenige Listen den Gewinn liefern.
 
 **Grenzen dieses Modells** (bewusst so gewählt, damit die Aussage ehrlich bleibt):
 
